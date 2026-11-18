@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: wallet-api
+  datasource:
+    # Default: in-memory H2 in PostgreSQL mode (local runs). Use --spring.profiles.active=postgres for real Postgres.
+    url: jdbc:h2:mem:wallet;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+app:
+  jwt:
+    # Dev-only secret; overridden by env var in CI. At least 32 bytes for HS256.
+    secret: ${JWT_SECRET:dev-only-secret-change-me-dev-only-secret}
+    expiration-minutes: 60
+---
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:wallet}
+    username: ${DB_USER:wallet}
+    password: ${DB_PASSWORD:wallet}
